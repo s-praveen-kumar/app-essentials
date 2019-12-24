@@ -64,7 +64,7 @@ public class EssDialogs {
                 .setNegativeButton(noTextId, listener).create().show();
     }
 
-    public static void singleChoiceDialog(Context context, String title, @Nullable String msg, String[] entries, @NonNull final SingleItemCallback callback) {
+    public static void singleChoiceDialog(Context context, String title, String[] entries, @NonNull final SingleItemCallback callback) {
         final int[] selected = {0};
         DialogInterface.OnClickListener listener = (dialog, which) -> {
             if (which == AlertDialog.BUTTON_POSITIVE)
@@ -74,13 +74,13 @@ public class EssDialogs {
             else
                 selected[0] = which;
         };
-        createDialog(context, title, msg).setSingleChoiceItems(entries, 0, (listener))
+        createDialog(context, title, null).setSingleChoiceItems(entries, 0, listener)
                 .setPositiveButton(android.R.string.ok, listener)
                 .setNegativeButton(android.R.string.cancel, listener)
                 .setOnCancelListener(dialog -> callback.onCanceled()).create().show();
     }
 
-    public static void singleChoiceDialog(Context context, @StringRes int titleId, @StringRes int msgId, @ArrayRes int entries, @NonNull final SingleItemCallback callback) {
+    public static void singleChoiceDialog(Context context, @StringRes int titleId, @ArrayRes int entries, @NonNull final SingleItemCallback callback) {
         final int[] selected = {0};
         DialogInterface.OnClickListener listener = (dialog, which) -> {
             if (which == AlertDialog.BUTTON_POSITIVE)
@@ -90,39 +90,39 @@ public class EssDialogs {
             else
                 selected[0] = which;
         };
-        createDialog(context, titleId, msgId).setSingleChoiceItems(entries, 0, (listener))
+        createDialog(context, titleId, 0).setSingleChoiceItems(entries, 0, (listener))
                 .setPositiveButton(android.R.string.ok, listener)
                 .setNegativeButton(android.R.string.cancel, listener)
                 .setOnCancelListener(dialog -> callback.onCanceled()).create().show();
     }
 
-    public static void multipleChoiceDialog(Context context, String title, @Nullable String msg, String[] entries, final boolean[] checked, @NonNull final MultipleItemCallback callback) {
+    public static void multipleChoiceDialog(Context context, String title, String[] entries, final boolean[] checked, @NonNull final MultipleItemCallback callback) {
         DialogInterface.OnClickListener listener = (dialog, which) -> {
             if (which == AlertDialog.BUTTON_POSITIVE)
                 callback.onSelected(checked);
             else if (which == AlertDialog.BUTTON_NEGATIVE)
                 callback.onCanceled();
         };
-        createDialog(context, title, msg).setMultiChoiceItems(entries, checked, (dialog, which, isChecked) -> checked[which] = isChecked)
+        createDialog(context, title, null).setMultiChoiceItems(entries, checked, (dialog, which, isChecked) -> checked[which] = isChecked)
                 .setPositiveButton(android.R.string.ok, listener)
                 .setNegativeButton(android.R.string.cancel, listener)
                 .setOnCancelListener(dialog -> callback.onCanceled()).create().show();
     }
 
-    public static void multipleChoiceDialog(Context context, @StringRes int titleId, @StringRes int msgId, @ArrayRes int entries, final boolean[] checked, @NonNull final MultipleItemCallback callback) {
+    public static void multipleChoiceDialog(Context context, @StringRes int titleId, @ArrayRes int entries, final boolean[] checked, @NonNull final MultipleItemCallback callback) {
         DialogInterface.OnClickListener listener = (dialog, which) -> {
             if (which == AlertDialog.BUTTON_POSITIVE)
                 callback.onSelected(checked);
             else if (which == AlertDialog.BUTTON_NEGATIVE)
                 callback.onCanceled();
         };
-        createDialog(context, titleId, msgId).setMultiChoiceItems(entries, checked, (dialog, which, isChecked) -> checked[which] = isChecked)
+        createDialog(context, titleId, 0).setMultiChoiceItems(entries, checked, (dialog, which, isChecked) -> checked[which] = isChecked)
                 .setPositiveButton(android.R.string.ok, listener)
                 .setNegativeButton(android.R.string.cancel, listener)
                 .setOnCancelListener(dialog -> callback.onCanceled()).create().show();
     }
 
-    public static void inputTextDialog(Context context, String title, @Nullable String msg, boolean multiLine, int inputType, @Nfinal TextEnteredCallback callback) {
+    public static void inputTextDialog(Context context, String title, @Nullable String msg, boolean multiLine, int inputType, @NonNull final TextEnteredCallback callback) {
         final EditText editText = new EditText(context);
         editText.setSingleLine(!multiLine);
         editText.setInputType(inputType);
@@ -136,11 +136,13 @@ public class EssDialogs {
                 .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(android.R.string.cancel, ((d, which) -> callback.onCanceled()))
                 .setCancelable(false).create();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            if (callback.validate(editText.getText().toString())) {
-                callback.onTextEntered(editText.getText().toString());
-                dialog.dismiss();
-            }
+        dialog.setOnShowListener(dialog1 -> {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+                if (!editText.getText().toString().isEmpty() && callback.validate(editText.getText().toString())) {
+                    callback.onTextEntered(editText.getText().toString());
+                    dialog.dismiss();
+                }
+            });
         });
         dialog.show();
     }
@@ -160,7 +162,7 @@ public class EssDialogs {
                 .setNegativeButton(android.R.string.cancel, ((d, which) -> callback.onCanceled()))
                 .setCancelable(false).create();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            if (callback.validate(editText.getText().toString())) {
+            if (!editText.getText().toString().isEmpty() && callback.validate(editText.getText().toString())) {
                 callback.onTextEntered(editText.getText().toString());
                 dialog.dismiss();
             }
@@ -169,23 +171,23 @@ public class EssDialogs {
     }
 
 
-    interface YesNoCallback {
+    public interface YesNoCallback {
         void onResult(boolean yes);
     }
 
-    interface SingleItemCallback {
+    public interface SingleItemCallback {
         void onItemSelected(int pos, String entry);
 
         void onCanceled();
     }
 
-    interface MultipleItemCallback {
+    public interface MultipleItemCallback {
         void onSelected(boolean[] checked);
 
         void onCanceled();
     }
 
-    interface TextEnteredCallback {
+    public interface TextEnteredCallback {
         void onTextEntered(String text);
 
         void onCanceled();

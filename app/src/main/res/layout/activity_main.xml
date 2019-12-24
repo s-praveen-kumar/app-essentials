@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2019. Praveen Kumar S
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/info_dialog_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDialog"
+        android:layout_margin="@dimen/margin"
+        android:text="Info Dialog" />
+
+    <Button
+        android:id="@+id/yesno_dialog_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDialog"
+        android:layout_margin="@dimen/margin"
+        android:text="Yes No Dialog" />
+
+    <Button
+        android:id="@+id/singleChoice_dialog_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDialog"
+        android:layout_margin="@dimen/margin"
+        android:text="Single Choice Dialog" />
+
+    <Button
+        android:id="@+id/multiChoice_dialog_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDialog"
+        android:layout_margin="@dimen/margin"
+        android:text="Multi Choice Dialog" />
+
+
+    <Button
+        android:id="@+id/text_dialog_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDialog"
+        android:layout_margin="@dimen/margin"
+        android:text="Text Input Dialog" />
+</LinearLayout>
