@@ -7,6 +7,8 @@ package dev.praveens.appessentials;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import androidx.annotation.ArrayRes;
 import androidx.annotation.NonNull;
@@ -120,6 +122,52 @@ public class EssDialogs {
                 .setOnCancelListener(dialog -> callback.onCanceled()).create().show();
     }
 
+    public static void inputTextDialog(Context context, String title, @Nullable String msg, boolean multiLine, int inputType, @Nfinal TextEnteredCallback callback) {
+        final EditText editText = new EditText(context);
+        editText.setSingleLine(!multiLine);
+        editText.setInputType(inputType);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        params.rightMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        FrameLayout layout = new FrameLayout(context);
+        layout.addView(editText, params);
+        editText.setLayoutParams(params);
+        AlertDialog dialog = createDialog(context, title, msg).setView(layout)
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(android.R.string.cancel, ((d, which) -> callback.onCanceled()))
+                .setCancelable(false).create();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            if (callback.validate(editText.getText().toString())) {
+                callback.onTextEntered(editText.getText().toString());
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public static void inputTextDialog(Context context, @StringRes int titleId, @StringRes int msgId, boolean multiLine, int inputType, @NonNull final TextEnteredCallback callback) {
+        final EditText editText = new EditText(context);
+        editText.setSingleLine(!multiLine);
+        editText.setInputType(inputType);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        params.rightMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        FrameLayout layout = new FrameLayout(context);
+        layout.addView(editText, params);
+        editText.setLayoutParams(params);
+        AlertDialog dialog = createDialog(context, titleId, msgId).setView(layout)
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(android.R.string.cancel, ((d, which) -> callback.onCanceled()))
+                .setCancelable(false).create();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            if (callback.validate(editText.getText().toString())) {
+                callback.onTextEntered(editText.getText().toString());
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
 
     interface YesNoCallback {
         void onResult(boolean yes);
@@ -135,5 +183,13 @@ public class EssDialogs {
         void onSelected(boolean[] checked);
 
         void onCanceled();
+    }
+
+    interface TextEnteredCallback {
+        void onTextEntered(String text);
+
+        void onCanceled();
+
+        boolean validate(String text);
     }
 }
