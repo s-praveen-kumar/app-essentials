@@ -51,4 +51,21 @@
         android:onClick="showDialog"
         android:layout_margin="@dimen/margin"
         android:text="Text Input Dialog" />
+
+    <Button
+        android:id="@+id/seekbar_dialog_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDialog"
+        android:layout_margin="@dimen/margin"
+        android:text="Seekbar Dialog" />
+
+    <Button
+        android:id="@+id/rating_dialog_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDialog"
+        android:layout_margin="@dimen/margin"
+        android:text="Rating Dialog" />
+
 </LinearLayout>

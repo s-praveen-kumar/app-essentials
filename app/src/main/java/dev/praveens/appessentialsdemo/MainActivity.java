@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (v.getId() == R.id.singleChoice_dialog_btn) {
 
-            EssDialogs.singleChoiceDialog(this,  "Your favourite ice cream?", new String[]{"Chocolate", "Vanilla", "Butterscotch", "Pistachio"}, new EssDialogs.SingleItemCallback() {
+            EssDialogs.singleChoiceDialog(this, "Your favourite ice cream?", new String[]{"Chocolate", "Vanilla", "Butterscotch", "Pistachio"}, new EssDialogs.SingleItemCallback() {
                 @Override
                 public void onItemSelected(int pos, String entry) {
                     Toast.makeText(MainActivity.this, entry + " is yummy too!", Toast.LENGTH_SHORT).show();
@@ -84,6 +84,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+        } else if (v.getId() == R.id.seekbar_dialog_btn) {
+
+            EssDialogs.seekBarDialog(this, "Rate this library", "How much do you hate this library?", 10, new EssDialogs.SeekBarCallback() {
+                @Override
+                public void onResult(int progress) {
+                    Toast.makeText(MainActivity.this, "Thank you for your valuable feedback", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCanceled() {
+
+                }
+            });
+        } else if (v.getId() == R.id.rating_dialog_btn) {
+
+            EssDialogs.ratingDialog(this, "Rate this library", "How much do you hate this library?", 5, new EssDialogs.RatingCallback() {
+                @Override
+                public void onResult(float rating) {
+                    Toast.makeText(MainActivity.this, "Thank you for your valuable feedback - " + rating, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCanceled() {
+
+                }
+            });
         }
     }
 }

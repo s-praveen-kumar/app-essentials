@@ -7,8 +7,11 @@ package dev.praveens.appessentials;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RatingBar;
+import android.widget.SeekBar;
 
 import androidx.annotation.ArrayRes;
 import androidx.annotation.NonNull;
@@ -170,6 +173,69 @@ public class EssDialogs {
         dialog.show();
     }
 
+    public static void seekBarDialog(Context context, String title, @Nullable String msg, int maxProgress, @NonNull final SeekBarCallback callback) {
+        final SeekBar seekBar = new SeekBar(context);
+        seekBar.setMax(maxProgress);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        params.rightMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        FrameLayout layout = new FrameLayout(context);
+        layout.addView(seekBar, params);
+        seekBar.setLayoutParams(params);
+        createDialog(context, title, msg).setView(layout)
+                .setPositiveButton(android.R.string.ok, ((dialog, which) -> callback.onResult(seekBar.getProgress())))
+                .setNegativeButton(android.R.string.cancel, ((d, which) -> callback.onCanceled()))
+                .setCancelable(false).create().show();
+    }
+
+    public static void seekBarDialog(Context context, @StringRes int titleId, @StringRes int msgId, int maxProgress, @NonNull final SeekBarCallback callback) {
+        final SeekBar seekBar = new SeekBar(context);
+        seekBar.setMax(maxProgress);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        params.rightMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        FrameLayout layout = new FrameLayout(context);
+        layout.addView(seekBar, params);
+        seekBar.setLayoutParams(params);
+        createDialog(context, titleId, msgId).setView(layout)
+                .setPositiveButton(android.R.string.ok, ((dialog, which) -> callback.onResult(seekBar.getProgress())))
+                .setNegativeButton(android.R.string.cancel, ((d, which) -> callback.onCanceled()))
+                .setCancelable(false).create().show();
+    }
+
+    public static void ratingDialog(Context context, String title, @Nullable String msg, int numStars, @NonNull final RatingCallback callback) {
+        final RatingBar ratingBar = new RatingBar(context);
+        ratingBar.setIsIndicator(false);
+        ratingBar.setNumStars(numStars);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        params.rightMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        params.gravity = Gravity.CENTER;
+        FrameLayout layout = new FrameLayout(context);
+        layout.addView(ratingBar, params);
+        ratingBar.setLayoutParams(params);
+        createDialog(context, title, msg).setView(layout)
+                .setPositiveButton(android.R.string.ok, ((dialog, which) -> callback.onResult(ratingBar.getRating())))
+                .setNegativeButton(android.R.string.cancel, ((d, which) -> callback.onCanceled()))
+                .setCancelable(false).create().show();
+    }
+
+    public static void ratingDialog(Context context, @StringRes int titleId, @StringRes int msgId, int numStars, @NonNull final RatingCallback callback) {
+        final RatingBar ratingBar = new RatingBar(context);
+        ratingBar.setIsIndicator(false);
+        ratingBar.setNumStars(numStars);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        params.rightMargin = context.getResources().getDimensionPixelSize(R.dimen.margin);
+        params.gravity = Gravity.CENTER;
+        FrameLayout layout = new FrameLayout(context);
+        layout.addView(ratingBar, params);
+        ratingBar.setLayoutParams(params);
+        createDialog(context, titleId, msgId).setView(layout)
+                .setPositiveButton(android.R.string.ok, ((dialog, which) -> callback.onResult(ratingBar.getRating())))
+                .setNegativeButton(android.R.string.cancel, ((d, which) -> callback.onCanceled()))
+                .setCancelable(false).create().show();
+    }
 
     public interface YesNoCallback {
         void onResult(boolean yes);
@@ -193,5 +259,17 @@ public class EssDialogs {
         void onCanceled();
 
         boolean validate(String text);
+    }
+
+    public interface SeekBarCallback {
+        void onResult(int progress);
+
+        void onCanceled();
+    }
+
+    public interface RatingCallback {
+        void onResult(float rating);
+
+        void onCanceled();
     }
 }
